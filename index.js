@@ -14,6 +14,7 @@ const app = express();
 // Add a basic route to check if server's up
 
 app.use(bodyParser.json({ type: "application/json" }));
+
 app.use(uploadRoute);
 
 app.use("/files", ensureAuthenticated);
@@ -26,6 +27,10 @@ app.post("/getSignedHash", (req, res) => {
 app.get("/", (req, res) => {
   res.status(200).send(`Server up and running`);
 });
+
+if (memLogInterval > 0) {
+  setInterval(() => PrintMemoryUsage(), memLogInterval);
+}
 
 app.listen(port, () => {
   console.log("Server running at http://127.0.0.1:3000/");
