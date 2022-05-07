@@ -2,9 +2,9 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const router = express.Router()
-
+const filesPaths = process.env.FILEPATH || '/data/files'; //=>Azure Blob
 const fileStorage = multer.diskStorage({
-    destination: '/data/files', // Destination to store image
+    destination: filesPaths, // Destination to store image
     filename: (req, file, cb) => {
         cb(null, file.originalname + '_' + Date.now() + path.extname(file.originalname))
     }
@@ -13,10 +13,10 @@ const fileStorage = multer.diskStorage({
 const fileUpload = multer({
     storage: fileStorage,
     limits: {
-        fileSize: 1073741824   // 1073741824 Bytes = 1 GB
+        fileSize: 1173741824   // 1073741824 Bytes = 1 GB
     },
     fileFilter(req, file, cb) {
-        if (!file.originalname.match(/\.(png|jpg|mov)$/)) {     // upload only png and jpg format
+        if (!file.originalname.match(/\.(png|jpg|mov|zip)$/)) {     // upload only png and jpg format
             return cb(new Error('Please upload valid files only'))
         }
         cb(undefined, true)
